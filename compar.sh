@@ -22,6 +22,9 @@ user=`whoami`
 mkdir -p /home/$user/compartir
 cp * /home/$user/compartir
 chmod +777 /home/$user/compartir
-
+ubic=`pwd`
+#`PATH=$PATH:$ubic`
+#echo "$ubic"
+sudo cp compar.sh /usr/local/bin
 serve -p 1234 /home/$user/compartir
 
