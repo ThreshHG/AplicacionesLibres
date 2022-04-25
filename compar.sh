@@ -16,10 +16,12 @@ else
 echo -e  "NO SE ENCUENTRA INSTALADO $i"
 sudo apt install  $i -y
 sudo npm install -g $i
-
 fi
-done 
-cd $user
-mkdir compartir
-serve -p 1234  compartir
+done
+user=`whoami`
+mkdir -p /home/$user/compartir
+cp * /home/$user/compartir
+chmod +777 /home/$user/compartir
+
+serve -p 1234 /home/$user/compartir
 
