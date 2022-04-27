@@ -4,10 +4,11 @@ const app = express()
 const port = 3000
 
 var files = fs.readdirSync("./carpetaDeEjemploALeer");
-var myJsonString = JSON.stringify(files);
+const objeto = Object.assign({},files)
+// var myJsonString = JSON.stringify(objeto);
 
 app.get('/', (req, res) => {
-  res.json(myJsonString)
+  res.json(objeto)
 })
 
 app.listen(port, () => {
@@ -16,6 +17,7 @@ app.listen(port, () => {
 
 const { Http2ServerRequest } = require('http2');
 
-console.log(files);
-console.log(myJsonString);
+//console.log(files);
+//console.log(objeto);
+//console.log(myJsonString);
 
