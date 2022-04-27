@@ -8,8 +8,7 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "vista": "serve -p 1234 ./",
-    "servidor": "node app"
+    "run": "node app"
   },
   "repository": {
     "type": "git",
