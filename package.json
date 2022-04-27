@@ -7,7 +7,7 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "run": "node app"
+    "levantar": "node app"
   },
   "repository": {
     "type": "git",
