@@ -61,7 +61,7 @@
 										<a href="<?php echo $ruta . "/" . $archivo ?>" target="_blank"><?php echo $archivo ?></a>
 									</div>
 					<?php				      
-				                    obtener_estructura_directorios($ruta_completa);
+				                 //   obtener_estructura_directorios($ruta_completa);
 				                } else {
 					?>
 									<div class="a">
