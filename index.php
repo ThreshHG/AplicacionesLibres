@@ -37,7 +37,7 @@
 					</div>
 				</div>
 				<div class="titulo2">Tecnicatura en Administración de Sistemas y Software Libre</div>
-				<div class="titulo3">Grupo: Gabriel - Marcos - Selene - Gaspar - Emanuel - Franco - Diego</div>
+				<div class="titulo3">Grupo: Gabriel - Marcos - Gaspar - Diego</div>
 			</div>			
 			<div id="centro">
 				<div class="impresion">
@@ -55,20 +55,13 @@
 				            // Se muestran todos los archivos y carpetas excepto "." y ".."
 				            if ($archivo != "." && $archivo != "..") {
 				                // Si es un directorio se recorre recursivamente
-				                if (is_dir($ruta_completa)) {
+
 					?>
 									<div class="a">
 										<a href="<?php echo $ruta . "/" . $archivo ?>" target="_blank"><?php echo $archivo ?></a>
 									</div>
 					<?php				      
-				                 //   obtener_estructura_directorios($ruta_completa);
-				                } else {
-					?>
-									<div class="a">
-										<a href="<?php echo $ruta . "/" . $archivo ?>" target="_blank"><?php echo $archivo ?></a>
-									</div>
-					<?php				      
-				                }
+				                
 				            }
 				        }
 				        
