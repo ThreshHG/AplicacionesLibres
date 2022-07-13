@@ -6,22 +6,22 @@
 # Debian o Derivadas
 nmcli_debian(){
         #actualizamos
-        sudo apt update  
+        sudo apt update
         sudo apt upgrade -y
         #Instalamos curl para poder instalar NVM
         sudo apt install curl
-        #Revisión de secuencia de comandos 
-        if [ -f install_nvm.sh ] 
+        #Revisión de secuencia de comandos
+        if [ -f install_nvm.sh ]
 	then
 	echo "ya esta instalado"
 	else
 	curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh -o install_nvm.sh
         #revisar solo funciona en rootcurl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
         sudo bash install_nvm.sh
-        
-	 #Obtenemos secuencia de comandos 
+
+	 #Obtenemos secuencia de comandos
         source ~/.bashrc
-        ##Instalamos la versión deseada 
+        ##Instalamos la versión deseada
         nvm install v16.15.0
         npm install -g serve
         sleep 2
@@ -37,7 +37,7 @@ nmcli_debian(){
 	#nmcli con add type wifi ifname $IFNAME con-name $CON_NAME autoconnect yes ssid $CON_NAME
 	nmcli con add type wifi ifname $IFNAME con-name $CON_NAME  ssid $CON_NAME
 	##paso 3
-	##asignar ipv4 a la coneecion agregada anteriormente 
+	##asignar ipv4 a la coneecion agregada anteriormente
 	nmcli con modify $CON_NAME 802-11-wireless.mode ap 802-11-wireless.band bg ipv4.method shared
 	##paso 4
 	read -p "elije una contraseña" contrasenia
@@ -65,7 +65,7 @@ nmcli_debian(){
 
 }
 
-# Función para guía del usuario 
+# Función para guía del usuario Debian
 ayuda_debian(){
 	echo -e ""
 	echo -e "--------------------------------------------------------------------------------------"
@@ -80,12 +80,30 @@ ayuda_debian(){
 
 ##################################################################
 # Ubuntu o Derivadas
-# Función correr Nmcli y Serve
-nmcli_ubuntu(){	
-	sudo apt install nodejs;
-	sudo apt install npm -y;
-	npm install -g serve;
 
+#Crear Directorio
+node_esta_instalado(){
+	if which nodejs > /dev/null
+	then
+	    echo "Node se encuentra instalado."
+	    sudo apt install npm
+	else
+		echo "Node no se encuentra instalado."
+	    sudo apt install nodejs npm
+	fi
+}
+
+serve_esta_instalado(){
+	if which serve > /dev/null
+	then
+	        echo "Serve se encuentra instalado"
+	else
+	        echo "Serve no se encuentra instalado"
+	        sudo npm install -g serve
+	fi	
+}
+
+crear_directorio(){
 	user=`whoami`
 	if [ -d /home/$user/compartir ]
 	then
@@ -95,15 +113,32 @@ nmcli_ubuntu(){
 		sudo ln -s /home/$user/compartir  /home/$user/Escritorio
 		sudo chmod +777 /home/$user/compartir
 	fi	
+
+	sudo cp compartir.sh /usr/local/bin
+	sudo cp compartir.sh /usr/bin
+}
+
+# Función correr Nmcli y Serve
+nmcli_ubuntu(){
+
+	#node esta instalado?
+	node_esta_instalado
+
+	#serve esta instalado?
+	serve_esta_instalado
+
+	#Llamamos a la función crear directorio
+	crear_directorio
+
 	ubic=`pwd`
 	#`PATH=$PATH:$ubic`
 	#echo "$ubic"
 	read -p "Indique la clave que va tener el hotspot "  o
-	sudo cp compartir.sh /usr/local/bin
-	sudo cp compartir.sh /usr/bin
+	#sudo cp compartir.sh /usr/local/bin
+	#sudo cp compartir.sh /usr/bin
 	placa=`nmcli | awk -F ":" '/wlp/{print $1}'`
 	placa1=`echo $placa | awk '/wlp/{print $1}'`
-	nmcli dev wifi hotspot ifname $placa1 ssid Compartir  password "$o"
+	nmcli dev wifi hotspot ifname $placa1 ssid uncoma  password "$o"
 	nmcli dev wifi show-password
 
 	serve -p 1234 /home/$user/compartir
@@ -114,25 +149,23 @@ nmcli_ubuntu(){
 
 #Función para instalar Serve
 server_ubuntu(){
-	sudo apt install nodejs;
-	sudo apt install npm -y; 
-	npm install -g serve;
 
-	user=`whoami`
-	if [ -d /home/$user/compartir ]
-	then
-	   	sudo chmod +777 /home/$user/compartir
-	else
-		sudo mkdir -p /home/$user/compartir
-		sudo ln -s /home/$user/compartir  /home/$user/Escritorio
-		sudo chmod +777 /home/$user/compartir
-	fi	
-	sudo cp compartir.sh /usr/local/bin
-	sudo cp compartir.sh /usr/bin	
+	#node esta instalado?
+	node_esta_instalado
+
+	#serve esta instalado?
+	serve_esta_instalado
+
+	#Llamamos a la función crear directorio
+	crear_directorio
+
+	#sudo cp compartir.sh /usr/local/bin
+	#sudo cp compartir.sh /usr/bin
+
 	serve -p 1234 /home/$user/compartir
 }
 
-# Función para guía del usuario 
+# Función para guía del usuario Ubuntu
 ayuda_ubuntu(){
 	echo -e ""
 	echo -e "--------------------------------------------------------------------------------------"
@@ -146,7 +179,7 @@ ayuda_ubuntu(){
     echo -e ""
 }
 
-# submenu
+# submenu debian
 debian_ () {
 	echo -e ""
 	echo -e "--------------------------------------------------------------------------------------"
@@ -177,7 +210,7 @@ debian_ () {
 	done
 }
 
-# submenu
+# submenu ubuntu
 ubuntu_ () {
 	echo -e ""
 	echo -e "--------------------------------------------------------------------------------------"
@@ -212,6 +245,7 @@ ubuntu_ () {
 	done
 }
 
+#Verificamos que versión de Debian estamos utilizando
 verificar_debian(){
 	IFS='.' read -a VERSION < /etc/debian_version
 	if [[ $VERSION == "8" || $VERSION == "10" || $VERSION == "11" ]]; then 
@@ -225,6 +259,7 @@ verificar_debian(){
 	fi	
 }
 
+#Verificamos que versión de Ubuntu estamos utilizando
 verificar_ubuntu(){
 	if [[ $(lsb_release -rs) == "20.04" || $(lsb_release -rs) == "22.04" ]]; then 
 
@@ -237,6 +272,7 @@ verificar_ubuntu(){
 	fi	
 }
 
+#Verificamos que versión de GNU/Linux estamos utilizando
 version_(){
 	cat /etc/*release
 }
